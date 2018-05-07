@@ -86,8 +86,8 @@ function playDeck () {
 
             //move count is updated
             game.moves++;
-            //TODO update html
-            //TODO update Star Rating
+            updateMoves(game.moves);
+            //TODO update Star Rating via function
         } else return;
 
         if (game.cardA.name === game.cardB.name) {
@@ -122,6 +122,11 @@ function playDeck () {
             game.cardA = null;
             game.cardB = null;
         }, 800);
+    }
+
+    function updateMoves (update) {
+        const moveElem = document.body.querySelector('.moves');
+        moveElem.innerHTML = update;
     }
 
 createDeck();
