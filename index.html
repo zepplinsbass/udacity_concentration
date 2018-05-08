@@ -12,19 +12,34 @@
 
     <div class="container">
         <header>
-            <h1>Matching Game</h1>
+            <h1>Concentration</h1>
         </header>
 
         <section class="score-panel">
-        	<ul class="stars">
+          <ul class="stars">
         		<li><i class="fa fa-star"></i></li>
         		<li><i class="fa fa-star"></i></li>
-        		<li><i class="fa fa-star"></i></li>
-        	</ul>
+            <li><i class="fa fa-star"></i></li>
+            <p id="score">Score</p>
+          </ul>
 
-        	<span class="moves">0</span> Moves
+          <div class="separator"></div>
 
-            <div class="restart">
+          <div class="move-panel">
+            <span class="moves">0</span>
+            <p id="move-label">Moves</p>
+          </div>
+
+          <div class="separator"></div>
+
+          <div class="timer-panel">
+            <span class="timer">0.00</span>
+            <p id="timer-label">Timer</p>
+          </div>
+
+          <div class="separator"></div>
+
+          <div class="restart">
         		<i class="fa fa-repeat"></i>
         	</div>
         </section>

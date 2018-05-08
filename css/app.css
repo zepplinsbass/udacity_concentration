@@ -31,6 +31,11 @@ body {
 h1 {
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
+    font-size: 2.5em;
+}
+
+header {
+    margin-bottom: -10px;
 }
 
 /*
@@ -39,8 +44,8 @@ h1 {
 
 .deck {
     width: 660px;
-    min-height: 680px;
-    background: linear-gradient(160deg, #ea8c0d 0%, #0d98ea 100%);
+    min-height: 660px;
+    background: linear-gradient(180deg, #ea8c0d 0%, #bf720b 100%);
     padding: 32px;
     border-radius: 10px;
     box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
@@ -67,7 +72,7 @@ h1 {
 
 .deck .card.open {
     transform: rotateY(0);
-    background: #48dbed;
+    background: #0d98ea;
     cursor: default;
 }
 
@@ -86,16 +91,32 @@ h1 {
  */
 
 .score-panel {
-    text-align: left;
-    width: 345px;
-    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    background: #ea8c0d;/*linear-gradient(180deg, #ea8c0d 0%, #bf720b 100%);*/
+    border-radius: 10px;
+    box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
+
+    color: white;
+
+    text-align: center;
+    width: 660px;
+    height: 50px;
+    margin-bottom: 15px;
 }
 
-.score-panel .stars {
-    margin: 0;
-    padding: 0;
-    display: inline-block;
-    margin: 0 5px 0 0;
+.separator {
+    height: 90%;
+    width: 1px;
+
+    background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,1), rgba(255,255,255,0));
+}
+
+.stars {
+    width: 25%;
 }
 
 .score-panel .stars li {
@@ -103,7 +124,32 @@ h1 {
     display: inline-block;
 }
 
-.score-panel .restart {
-    float: right;
+.score-panel #score {
+    display: inline-block;
+    padding: 0 10px 0 10px;
+}
+
+.move-panel {
+    width: 20%;
+}
+
+.move-panel #move-label {
+    display: inline-block;
+}
+
+.timer-panel {
+    width: 20%;
+}
+
+.timer-panel #timer-label {
+    display: inline-block;
+}
+
+.restart {
+    width: 10%;
+
+    font-size: 1.5em;
     cursor: pointer;
+    margin-right: 10px;
+    padding-right: 20px;
 }

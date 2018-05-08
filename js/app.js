@@ -63,6 +63,7 @@ function playDeck () {
     function createDeck () {
         createCards();
         shuffle(game.deck);
+        resetDeck();
         const list = document.body.querySelector('.deck');
         const elem = list.getElementsByTagName('li');
         for (let i = 0; i < game.deck.length; i++) {
@@ -121,12 +122,24 @@ function playDeck () {
 
             game.cardA = null;
             game.cardB = null;
-        }, 800);
+        }, 600);
     }
 
     function updateMoves (update) {
         const moveElem = document.body.querySelector('.moves');
         moveElem.innerHTML = update;
+    }
+
+    function gameOver () {
+        game.deck = [];
+        game.moves = 0;
+        updateMoves(game.moves);
+        createDeck();
+    }
+
+    function resetDeck () {
+        const reset = document.body.querySelector('.restart');
+        reset.addEventListener('click', gameOver);
     }
 
 createDeck();
