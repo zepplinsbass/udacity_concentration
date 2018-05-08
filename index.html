@@ -9,6 +9,22 @@
     <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
+    <div class="congrats"> <!--Congratulations Modal-->
+      <div class="congrats-content">
+        <div class="congrats-header">
+          <span class="close">&times;</span>
+          <p id="modal-text">Congratulations!</p>
+        </div>
+        <div class="congrats-body">
+          <p id="your-rating">Your Rating:</p>
+          <span id="js-rating"></span>
+          <p id="your-time">Your Completion Time:</p>
+          <span id="js-time"></span>
+        </div>
+        <button id="play-again">Play
+        </button>
+      </div>
+    </div>
 
     <div class="container">
         <header>
@@ -33,7 +49,7 @@
           <div class="separator"></div>
 
           <div class="timer-panel">
-            <span class="timer">0.00</span>
+            <span class="timer">0s</span>
             <p id="timer-label">Timer</p>
           </div>
 

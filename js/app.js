@@ -25,10 +25,11 @@ const game = {
     deck: [],
     cardA: null,
     cardB: null,
-    timer: '',
+    timer: 0,
     score: 0,
     starRating: 0,
     moves: 0,
+    start: false,
 }
 
 function playDeck () {
@@ -42,9 +43,21 @@ function playDeck () {
 
             //Adds the event listener to each card.
             cardStatus[i].addEventListener('click', function () {
+                  if (game.start === false) {
+                      game.start = true;
+                      startTimer();
+                  }
                   checkMatch(game.deck[i], cardStatus[i]);
             });
         }
+    }
+
+    function startTimer () {
+        const elem = document.body.querySelector('.timer');
+        setInterval(function() {
+            ++game.timer;
+            elem.innerHTML = `${game.timer}s`;
+        }, 1000);
     }
 
     /* Shuffle the deck array. Shuffle function from http://stackoverflow.com/a/2450976 */
@@ -75,19 +88,19 @@ function playDeck () {
     }
 
     function checkMatch (card, elem) {
-        if (game.cardA === null) {
+        if ((game.cardA === null) && (elem.className === 'card')) {
             game.cardA = card;
             elem.className = 'card open show';
             game.cardA.status = 'card open show';
             return;
-        } else if ((game.cardA !== null) && (game.cardA !== card)) {
+        } else if ((game.cardA !== null) && (game.cardA !== card) && (elem.className === 'card')) {
             game.cardB = card;
             elem.className = 'card open show';
             game.cardB.status = 'card open show';
 
             //move count is updated
             game.moves++;
-            updateMoves(game.moves);
+            updateScorePanel(game.moves, 'moves');
             //TODO update Star Rating via function
         } else return;
 
@@ -99,18 +112,18 @@ function playDeck () {
     }
 
     function isMatch () {
-        game.score++;
-        if (game.score === game.deck.length) {
-            gameOver();
+        ++game.score;
+        if (game.score === (game.deck.length/2)) {
+            popCongrats();
         } else {
         const list = document.body.querySelector('.deck');
-        const match = list.querySelectorAll('li.card.open.show');
+        let match = list.querySelectorAll('li.card.open.show');
         match[0].className = 'card match';
         match[1].className = 'card match';
-        //TODO remove event listeners
-        }
+
         game.cardA = null;
         game.cardB = null;
+        }
     }
 
     function flipDown () {
@@ -125,21 +138,42 @@ function playDeck () {
         }, 600);
     }
 
-    function updateMoves (update) {
-        const moveElem = document.body.querySelector('.moves');
-        moveElem.innerHTML = update;
+    function updateScorePanel (update, element) {
+        const selectElem = document.body.getElementsByClassName(element);
+        selectElem[0].innerHTML = update;
     }
 
     function gameOver () {
         game.deck = [];
         game.moves = 0;
-        updateMoves(game.moves);
+        game.score = 0;
+        game.timer = 0;
+        game.starRating = 0;
+        game.start = false;
+        game.cardA = null;
+        game.cardB = null;
+        updateScorePanel(game.moves, 'moves');
         createDeck();
     }
 
     function resetDeck () {
         const reset = document.body.querySelector('.restart');
         reset.addEventListener('click', gameOver);
+    }
+
+    function popCongrats (rating, time) {
+        const modal = document.body.querySelector('.congrats');
+        const close = modal.querySelector('.close');
+        const button = modal.querySelector('#play-again');
+        modal.style.display = 'flex';
+
+        close.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        button.addEventListener('click', function() {
+            modal.style.display = 'none';
+            gameOver();
+        });
     }
 
 createDeck();
