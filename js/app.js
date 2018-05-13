@@ -25,9 +25,10 @@ const game = {
     deck: [],
     cardA: null,
     cardB: null,
+    toggle: null,
     timer: 0,
     score: 0,
-    starRating: 0,
+    starRating: 3,
     moves: 0,
     start: false,
 }
@@ -45,19 +46,28 @@ function playDeck () {
             cardStatus[i].addEventListener('click', function () {
                   if (game.start === false) {
                       game.start = true;
-                      startTimer();
+                      checkMatch(game.deck[i], cardStatus[i]);
+                      toggleTimer();
+                  } else {
+                      checkMatch(game.deck[i], cardStatus[i]);
                   }
-                  checkMatch(game.deck[i], cardStatus[i]);
             });
         }
     }
 
-    function startTimer () {
+    function toggleTimer () {
+        if (!game.toggle) {
+            game.toggle = window.setInterval(runTimer, 1000);
+        } else {
+            window.clearInterval(game.toggle);
+            game.toggle = null;
+        }
+    }
+
+    function runTimer() {
         const elem = document.body.querySelector('.timer');
-        setInterval(function() {
-            ++game.timer;
-            elem.innerHTML = `${game.timer}s`;
-        }, 1000);
+        elem.innerHTML = `${game.timer}s`;
+        game.timer += 1;
     }
 
     /* Shuffle the deck array. Shuffle function from http://stackoverflow.com/a/2450976 */
@@ -101,7 +111,6 @@ function playDeck () {
             //move count is updated
             game.moves++;
             updateScorePanel(game.moves, 'moves');
-            //TODO update Star Rating via function
         } else return;
 
         if (game.cardA.name === game.cardB.name) {
@@ -109,11 +118,14 @@ function playDeck () {
         } else {
             flipDown();
         }
+        updateStars();
     }
 
     function isMatch () {
         ++game.score;
         if (game.score === (game.deck.length/2)) {
+            game.start = false;
+            toggleTimer();
             popCongrats();
         } else {
         const list = document.body.querySelector('.deck');
@@ -138,6 +150,34 @@ function playDeck () {
         }, 600);
     }
 
+    function updateStars () {
+        const element = document.body.querySelector('.stars');
+        const stars = ((10 + game.score) - game.moves);
+        if (stars > 6) {
+            game.starRating = 3;
+        }
+        else if ((stars <= 6) && (stars > -1)) {
+            game.starRating = 2;
+        }
+        else if ((stars <= -1) && (stars > -7)) {
+            game.starRating = 1;
+        }
+        else if (stars <= -7) {
+            game.starRating = 0;
+        }
+        for (let i = game.starRating; i < 3; i++) {
+            const x = element.getElementsByTagName('li');
+            x[i].style.display = 'none';
+        }
+
+        if (game.start === false) {
+            for (let j = 0; j < 3; j++) {
+                const x = element.getElementsByTagName('li');
+                x[j].style.display = '';
+            }
+        }
+    }
+
     function updateScorePanel (update, element) {
         const selectElem = document.body.getElementsByClassName(element);
         selectElem[0].innerHTML = update;
@@ -148,24 +188,35 @@ function playDeck () {
         game.moves = 0;
         game.score = 0;
         game.timer = 0;
-        game.starRating = 0;
+        game.starRating = 3;
         game.start = false;
         game.cardA = null;
         game.cardB = null;
+        game.toggle = null;
         updateScorePanel(game.moves, 'moves');
+        updateStars();
         createDeck();
     }
 
     function resetDeck () {
         const reset = document.body.querySelector('.restart');
-        reset.addEventListener('click', gameOver);
+        reset.addEventListener('click', function() {
+              toggleTimer();
+              gameOver();
+        });
     }
 
     function popCongrats (rating, time) {
+        const yourRating = document.body.querySelector('#js-rating');
+        const yourTime = document.body.querySelector('#js-time');
+        const stars = document.body.querySelector('.stars');
         const modal = document.body.querySelector('.congrats');
         const close = modal.querySelector('.close');
         const button = modal.querySelector('#play-again');
         modal.style.display = 'flex';
+        yourTime.innerHTML = `${game.timer}s`;
+        yourRating.innerHTML = stars.innerHTML;
+        yourRating.className = 'stars';
 
         close.addEventListener('click', function() {
             modal.style.display = 'none';

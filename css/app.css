@@ -36,7 +36,7 @@ body {
 }
 
 .congrats-header {
-    height: 30%;
+    height: 25%;
 
     background: #ea8c0d;
     border-radius: 10px 10px 0 0;
@@ -58,7 +58,14 @@ body {
 
 .congrats-body {
     height: 50%;
+    width: 100%;
     text-align: center;
+
+    padding: 10px;
+}
+
+.your-time {
+    margin-top: 10px;
 }
 
 .congrats-content {
@@ -71,7 +78,7 @@ body {
     box-shadow: 5px 2px 20px 0 rgba(0, 0, 0, 0.5);
 
     width: 40%;
-    height: 30%;
+    height: 40%;
 
     margin-top: 60px;
 
@@ -86,7 +93,7 @@ body {
 
 #play-again {
     width: 125px;
-    height: 35px;
+    height: 15%;
 
     border-radius: 5px;
     background: #ea8c0d;
@@ -203,12 +210,12 @@ header {
     width: 25%;
 }
 
-.score-panel .stars li {
+.stars li {
     list-style: none;
     display: inline-block;
 }
 
-.score-panel #score {
+#score {
     display: inline-block;
     padding: 0 10px 0 10px;
 }
