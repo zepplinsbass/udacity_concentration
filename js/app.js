@@ -1,26 +1,11 @@
-/*
- * Create a list that holds all of your cards
- */
 
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
-
+//Card constructor. Creates cards that will be placed in the game.deck array.
 function Card (name, status) {
     this.name = name;
     this.status = status;
 }
 
-/* The game object contains the deck array (an array of Card objects), the
- * cardElems array (the NodeList of html card elements), and the checkCard
- * property, which always contains one of the Card objects from the deck. It
- * also contains the flipCard and checkMatch methods, which run in the
- * EventListener for each card.*/
-
+//Game object is referenced throughout the remainder of the program.
 const game = {
     deck: [],
     cardA: null,
@@ -33,8 +18,11 @@ const game = {
     start: false,
 }
 
+//Contains all other functions.
 function playDeck () {
 
+    //Grabs the list of card elements, adds an EventListener to each, creates a Card object for each, and places
+    //those Card objects in the game.deck array.
     function createCards () {
         const cardList = document.body.querySelector('.deck');
         const cardStatus = cardList.getElementsByTagName('li');
@@ -42,7 +30,9 @@ function playDeck () {
             const cardName = cardStatus[i].getElementsByTagName('i');
             game.deck[i] = new Card(cardName[0].className, cardStatus[i].className);
 
-            //Adds the event listener to each card.
+            //Adds the event listener to each card. The EventListener will
+            //start the game.timer, if it hasn't already started, and flip the
+            //cards to check for matches.
             cardStatus[i].addEventListener('click', function () {
                   if (game.start === false) {
                       game.start = true;
@@ -55,6 +45,7 @@ function playDeck () {
         }
     }
 
+    //Toggles the game timer on or off.
     function toggleTimer () {
         if (!game.toggle) {
             game.toggle = window.setInterval(runTimer, 1000);
@@ -64,6 +55,8 @@ function playDeck () {
         }
     }
 
+    //Incrementally increases game.timer and then writes that value to the
+    //timer html element. Called by the toggleTimer function.
     function runTimer() {
         const elem = document.body.querySelector('.timer');
         elem.innerHTML = `${game.timer}s`;
@@ -83,6 +76,12 @@ function playDeck () {
         return array;
     }
 
+    //Executes the createCards function to fill the game.deck array with Cards,
+    //then shuffles that array and writes those values back to the list of card
+    //html elements. So, no card elements are added or removed, but each has
+    //their class changed to match the game.deck array.
+    //Also executes the resetDeck function, which adds an EventListener to the
+    //'reset button'.
     function createDeck () {
         createCards();
         shuffle(game.deck);
@@ -97,6 +96,13 @@ function playDeck () {
         }
     }
 
+    //Flips a card face up when it's clicked and checks for matches.
+    //First, is the clicked card face-down AND there are no other face-up cards?
+    //If YES, then flip the card face-up and set it to game.cardA.
+    //If NO, then is the clicked card face-down AND there is another face-up card?
+    //If YES, then flip the card face-up and set it to game.cardB. Update the
+    //move count.
+    //If NO, then do nothing.
     function checkMatch (card, elem) {
         if ((game.cardA === null) && (elem.className === 'card')) {
             game.cardA = card;
@@ -113,21 +119,24 @@ function playDeck () {
             updateScorePanel(game.moves, 'moves');
         } else return;
 
+        //Then, check if the names of the two face-up cards match. Update the
+        //star rating afterwards.
         if (game.cardA.name === game.cardB.name) {
             isMatch();
         } else {
             flipDown();
         }
-        updateStars();
+        const stars = document.body.querySelector('.stars');
+        updateStars(stars);
     }
 
+    //This runs when two cards are matched.
+    //Incrememnets the score, which affects the star rating.
+    //Changes the class of the card elements for styling and locks them.
+    //Checks if all cards have been matched.
+    //If YES, then stops the game timer and starts the end-game modal.
     function isMatch () {
         ++game.score;
-        if (game.score === (game.deck.length/2)) {
-            game.start = false;
-            toggleTimer();
-            popCongrats();
-        } else {
         const list = document.body.querySelector('.deck');
         let match = list.querySelectorAll('li.card.open.show');
         match[0].className = 'card match';
@@ -135,9 +144,16 @@ function playDeck () {
 
         game.cardA = null;
         game.cardB = null;
+
+        if(game.score === (game.deck.length/2)) {
+            toggleTimer();
+            popCongrats();
         }
     }
 
+    //This runs when two cards are face-up, and they do not match.
+    //Flips them face-down after a brief delay. And resets game.cardA and
+    //game.cardB placeholders.
     function flipDown () {
         setTimeout(function () {
             const list = document.body.querySelector('.deck');
@@ -150,19 +166,21 @@ function playDeck () {
         }, 600);
     }
 
-    function updateStars () {
-        const element = document.body.querySelector('.stars');
+    //Calculates a star rating whenever game.move increases by 1. Then changes
+    //the html element to reflect the star rating.
+    //Star rating is just the result of game.moves subtracted from some constant added to game.score.
+    function updateStars (element) {
         const stars = ((10 + game.score) - game.moves);
-        if (stars > 6) {
+        if (stars > 5) {
             game.starRating = 3;
         }
-        else if ((stars <= 6) && (stars > -1)) {
+        else if ((stars <= 5) && (stars > -1)) {
             game.starRating = 2;
         }
-        else if ((stars <= -1) && (stars > -7)) {
+        else if ((stars <= -1) && (stars > -6)) {
             game.starRating = 1;
         }
-        else if (stars <= -7) {
+        else if (stars <= -6) {
             game.starRating = 0;
         }
         for (let i = game.starRating; i < 3; i++) {
@@ -178,11 +196,17 @@ function playDeck () {
         }
     }
 
+    //Used to update the html element for move count. Could be used to update
+    //timer as well (but currently it's not).
     function updateScorePanel (update, element) {
         const selectElem = document.body.getElementsByClassName(element);
         selectElem[0].innerHTML = update;
     }
 
+    //Runs whenever the 'reset button' is clicked or if a player selects 'Play
+    //Again?' on the congrats modal.
+    //Resets the game object, removes all Card objects, and updates all html
+    //elements accordingly.
     function gameOver () {
         game.deck = [];
         game.moves = 0;
@@ -198,6 +222,7 @@ function playDeck () {
         createDeck();
     }
 
+    //Adds an EventListener to the 'reset button'.
     function resetDeck () {
         const reset = document.body.querySelector('.restart');
         reset.addEventListener('click', function() {
@@ -206,7 +231,9 @@ function playDeck () {
         });
     }
 
-    function popCongrats (rating, time) {
+    //Congrats modal which appears when a player wins the game.
+    //Displays the player's star rating and completion time.
+    function popCongrats () {
         const yourRating = document.body.querySelector('#js-rating');
         const yourTime = document.body.querySelector('#js-time');
         const stars = document.body.querySelector('.stars');
@@ -217,6 +244,7 @@ function playDeck () {
         yourTime.innerHTML = `${game.timer}s`;
         yourRating.innerHTML = stars.innerHTML;
         yourRating.className = 'stars';
+        updateStars(yourRating);
 
         close.addEventListener('click', function() {
             modal.style.display = 'none';
@@ -233,13 +261,3 @@ createDeck();
 
 playDeck();
 
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
