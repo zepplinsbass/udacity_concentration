@@ -42,3 +42,9 @@
 
 #### Array Shuffle
 * http://stackoverflow.com/a/2450976
+
+#### General References
+* https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
+* https://www.w3schools.com/js/js_htmldom_eventlistener.asp
+* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice
+* https://github.com/sarah-maris/pokematch/tree/master/js
