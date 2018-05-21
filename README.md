@@ -24,3 +24,20 @@
 * Depending on how many moves it takes you to match all of the cards, you receive a star rating between 1 and 3--3 being the highest score.
 * When all cards are matched, the game is over. The timer stops and your final star rating is displayed.
 * You can restart the game at any time by hitting the restart button.
+
+##Resources/Citations
+
+####Fonts
+* (#https://fonts.googleapis.com/css?family=Coda)
+
+####Symbols
+* (#https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css)
+
+####Colors
+* [Adobe Kuler](#https://color.adobe.com/create/color-wheel/?base=2&rule=Complementary&selected=4&name=My%20Color%20Theme&mode=rgb&rgbvalues=0.6176470588235294,0.3622349392247174,0.017156862745098048,1,0.6408245349424053,0.15555555555555556,0.9176470588235294,0.5490196078431373,0.050980392156862744,0,0.3889231329586865,0.6176470588235294,0.050980392156862765,0.5967074549115912,0.9176470588235294&swatchOrder=0,1,2,3,4)
+
+####Timer
+* (#https://www.w3schools.com/jsref/met_win_setinterval.asp)
+
+####Array Shuffle
+* (#http://stackoverflow.com/a/2450976)
