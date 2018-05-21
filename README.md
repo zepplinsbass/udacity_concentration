@@ -23,4 +23,4 @@
 * Then click on another face-down card to flip it face-up. If the two face-up cards match, then they lock in place and you can flip over more cards. But if the two cards do not match, then they will flip face-down again.
 * Depending on how many moves it takes you to match all of the cards, you receive a star rating between 1 and 3--3 being the highest score.
 * When all cards are matched, the game is over. The timer stops and your final star rating is displayed.
-* You can restart the game at any time by hitting the [] button.
+* You can restart the game at any time by hitting the restart button.
