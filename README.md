@@ -1,20 +1,26 @@
-# Memory Game Project
+# Concentration - Memory Game
 
 ## Table of Contents
 
-* [Instructions](#instructions)
-* [Contributing](#contributing)
+* [Loading the Game](#loadingthegame)
+* [Game Description](#gamedescription)
+* [How To Play](#howtoplay)
 
-## Instructions
+## Loading the Game
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+* Clone the git repo and open index.html
 
-To get started, open `js/app.js` and start building out the app's functionality
+## Game Description
 
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
+* There are 16 cards in the deck, which are then laid out in a grid, face-down.
+* Each card must be flipped face-up to reveal its symbol.
+* There are 8 unique symbols, so only two cards ever have the same symbol.
+* The object of the game is to match each pair of cards with the same symbol.
 
-## Contributing
+## How To Play
 
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
-
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+* Click on any card to begin the game. A timer will start to count up.
+* Then click on another face-down card to flip it face-up. If the two face-up cards match, then they lock in place and you can flip over more cards. But if the two cards do not match, then they will flip face-down again.
+* Depending on how many moves it takes you to match all of the cards, you receive a star rating between 1 and 3--3 being the highest score.
+* When all cards are matched, the game is over. The timer stops and your final star rating is displayed.
+* You can restart the game at any time by hitting the [] button.
