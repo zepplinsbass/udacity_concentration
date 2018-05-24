@@ -36,8 +36,8 @@ function playDeck () {
             cardStatus[i].addEventListener('click', function () {
                   if (game.start === false) {
                       game.start = true;
+                      startTimer();
                       checkMatch(game.deck[i], cardStatus[i]);
-                      toggleTimer();
                   } else {
                       checkMatch(game.deck[i], cardStatus[i]);
                   }
@@ -45,22 +45,29 @@ function playDeck () {
         }
     }
 
-    //Toggles the game timer on or off.
-    function toggleTimer () {
-        if (!game.toggle) {
-            game.toggle = window.setInterval(runTimer, 1000);
-        } else {
-            window.clearInterval(game.toggle);
-            game.toggle = null;
-        }
+    //Starts the game timer. Only called at the beginning of the game, by
+    //createCards function.
+    function startTimer () {
+        game.toggle = window.setInterval(runTimer, 1000);
+        console.log('timer on');
     }
 
     //Incrementally increases game.timer and then writes that value to the
-    //timer html element. Called by the toggleTimer function.
+    //timer html element. Called by the startTimer function.
     function runTimer() {
         const elem = document.body.querySelector('.timer');
         elem.innerHTML = `${game.timer}s`;
         game.timer += 1;
+    }
+
+    //Stops the game timer and writes the game.timer value to the timer html
+    //element. Called when a player wins the game, and then again if the game
+    //resets.
+    function resetTimer() {
+        window.clearInterval(game.toggle);
+        const elem = document.body.querySelector('.timer');
+        elem.innerHTML = `${game.timer}s`;
+        console.log('timer off');
     }
 
     /* Shuffle the deck array. Shuffle function from http://stackoverflow.com/a/2450976 */
@@ -109,7 +116,7 @@ function playDeck () {
             elem.className = 'card open show';
             game.cardA.status = 'card open show';
             return;
-        } else if ((game.cardA !== null) && (game.cardA !== card) && (elem.className === 'card')) {
+        } else if ((game.cardB === null) && (game.cardA !== card) && (elem.className === 'card')) {
             game.cardB = card;
             elem.className = 'card open show';
             game.cardB.status = 'card open show';
@@ -117,7 +124,9 @@ function playDeck () {
             //move count is updated
             game.moves++;
             updateScorePanel(game.moves, 'moves');
-        } else return;
+        } else {
+            return;
+        }
 
         //Then, check if the names of the two face-up cards match. Update the
         //star rating afterwards.
@@ -146,8 +155,8 @@ function playDeck () {
         game.cardB = null;
 
         if(game.score === (game.deck.length/2)) {
-            toggleTimer();
             popCongrats();
+            resetTimer();
         }
     }
 
@@ -180,9 +189,7 @@ function playDeck () {
         else if ((stars <= -1) && (stars > -6)) {
             game.starRating = 1;
         }
-        else if (stars <= -6) {
-            game.starRating = 0;
-        }
+
         for (let i = game.starRating; i < 3; i++) {
             const x = element.getElementsByTagName('li');
             x[i].style.display = 'none';
@@ -191,7 +198,7 @@ function playDeck () {
         if (game.start === false) {
             for (let j = 0; j < 3; j++) {
                 const x = element.getElementsByTagName('li');
-                x[j].style.display = '';
+                x[j].style.display = 'inline-block';
             }
         }
     }
@@ -207,7 +214,7 @@ function playDeck () {
     //Again?' on the congrats modal.
     //Resets the game object, removes all Card objects, and updates all html
     //elements accordingly.
-    function gameOver () {
+    function gameOver (element) {
         game.deck = [];
         game.moves = 0;
         game.score = 0;
@@ -216,18 +223,18 @@ function playDeck () {
         game.start = false;
         game.cardA = null;
         game.cardB = null;
-        game.toggle = null;
         updateScorePanel(game.moves, 'moves');
-        updateStars();
+        updateStars(element);
+        resetTimer();
         createDeck();
     }
 
     //Adds an EventListener to the 'reset button'.
     function resetDeck () {
         const reset = document.body.querySelector('.restart');
+        const stars = document.body.querySelector('.stars');
         reset.addEventListener('click', function() {
-              toggleTimer();
-              gameOver();
+            gameOver(stars);
         });
     }
 
@@ -243,7 +250,7 @@ function playDeck () {
         modal.style.display = 'flex';
         yourTime.innerHTML = `${game.timer}s`;
         yourRating.innerHTML = stars.innerHTML;
-        yourRating.className = 'stars';
+        yourRating.className = 'stars-clone';
         updateStars(yourRating);
 
         close.addEventListener('click', function() {
@@ -251,7 +258,7 @@ function playDeck () {
         });
         button.addEventListener('click', function() {
             modal.style.display = 'none';
-            gameOver();
+            gameOver(stars);
         });
     }
 

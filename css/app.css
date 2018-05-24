@@ -210,7 +210,16 @@ header {
     width: 25%;
 }
 
+.stars-clone {
+    width: 25%;
+}
+
 .stars li {
+    list-style: none;
+    display: inline-block;
+}
+
+.stars-clone li {
     list-style: none;
     display: inline-block;
 }
